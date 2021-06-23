@@ -1,5 +1,6 @@
 ﻿using LibraryManagement.Entities;
 using LibraryManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -97,7 +98,7 @@ namespace LibraryManagement.Controllers
             await signInManager.SignOutAsync();
             return RedirectToAction("Login");
         }
-
+        [Authorize(Roles = "admin")]
         public IActionResult CreateRole()
         {
             return View();
@@ -333,6 +334,16 @@ namespace LibraryManagement.Controllers
             return View();
         }
 
+        public IActionResult AddBook()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddBook(Bookdetails book)
+        {
+            return View();
+        }
 
 
     }

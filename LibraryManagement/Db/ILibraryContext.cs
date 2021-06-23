@@ -10,5 +10,7 @@ namespace LibraryManagement.Db
     interface IlibraryContext
     {/*
          DbSet<User> userdetails { get; set; }*/
+
+         DbSet<Bookdetails> bookdetails { get; set; }
     }
 }
