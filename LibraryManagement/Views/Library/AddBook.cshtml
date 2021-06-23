@@ -1,0 +1,87 @@
+﻿@model Bookdetails
+@{
+    ViewData["Title"] = "Book";
+
+}
+<style>
+
+    .horizontal {
+        display: flex;
+        flex-direction: row;
+        text-align: center;
+        justify-content: center;
+        padding: 20px;
+        color: #212529;
+    }
+</style>
+<h1>Register</h1>
+
+
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 box">
+        <form enctype="multipart/form-data" asp-action="AddBook" asp-controller="Library" method="post">
+            <h4>Create a new account.</h4>
+            <hr />
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+            <div class="custom-file">
+               <input asp-for="@Model.Image" class="form-control custom-file-input" />
+               <label class="custom-file-label" asp-for="@Model.Image">Choose file ...</label>
+            </div>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="@Model.Publisher"></label>
+                <input asp-for="@Model.Publisher" class="form-control" />
+                <span asp-validation-for="@Model.Publisher" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model.Auther"></label>
+                <input asp-for="@Model.Auther" class="form-control" />
+                <span asp-validation-for="@Model.Auther" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model.Title"></label>
+                <input asp-for="@Model.Title" class="form-control" />
+                <span asp-validation-for="@Model.Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model.Discription"></label>
+                <input asp-for="@Model.Discription" class="form-control" />
+                <span asp-validation-for="@Model.Discription" class="text-danger"></span>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group text-center">
+                        <label asp-for="@Model.Available"></label>
+                    </div>
+                </div>
+
+                <div class="col-md-9">
+                    <div class="horizontal" style="justify-content: space-around;">
+                        <div>
+                            <input type="radio" id="teacher" name="Available" value="False">
+                            <label for="Unavailable"> Unavailable</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="student" name="Available" value="True">
+                            <label for="Available">Available</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </div>
+    <div class="col-md-4"></div>
+
+</div>

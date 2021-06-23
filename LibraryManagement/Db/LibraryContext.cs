@@ -14,6 +14,7 @@ namespace LibraryManagement.Db
         {
 
         }
+        public DbSet<Bookdetails> bookdetails { get; set; }
 
        /* public DbSet<User> userdetails { get; set; }*/
     }
