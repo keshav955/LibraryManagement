@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<User>
-
+@inject UserManager<User> userManager;
 @{
     ViewBag.Title = "All Users";
 }
@@ -55,41 +55,49 @@
         Add new user
     </a>
 
-         
-<table>
-    <tr class="header">
-        <th>User Id</th>
-        <th>Email</th>
-        <th>Username</th>
-        <th>IsApprovdsS
-        </th>
-    </tr>
 
-    @foreach (var item in Model)
-    {
-    <tr>
-        <td>@item.Id</td>
-        <td>@item.Email</td>
-        <td>@item.UserName</td>
-        <td>@item.IsApproved</td>
-    </tr>
-    }
-</table>
-        }
-        else
+    <table>
+        <tr class="header">
+            <th>User Id</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>
+                IsApproved
+            </th>
+            <th>Role</th>
+        </tr>
+
+        @foreach (var item in Model)
         {
-        <div class="card">
-            <div class="card-header">
-                No users created yet
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">
-                    Use the button below to create a user
-                </h5>
-                <a class="btn btn-primary" style="width:auto"
-                   asp-controller="Account" asp-action="Register">
-                    Add new user
-                </a>
-            </div>
-        </div>
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Email</td>
+                <td>@item.UserName</td>
+                <td>@item.IsApproved</td>
+                <td>@await userManager.GetRolesAsync(item)</td>
+            </tr>
         }
+
+        <a class="btn btn-primary" style="width:auto"
+           asp-controller="library" asp-action="ListByRole">
+           Get List By Roles
+        </a>
+    </table>
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No users created yet
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                Use the button below to create a user
+            </h5>
+            <a class="btn btn-primary" style="width:auto"
+               asp-controller="library" asp-action="Register">
+                Add new user
+            </a>
+        </div>
+    </div>
+}

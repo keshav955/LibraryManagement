@@ -1,13 +1,9 @@
 ﻿@model RegisterUser
 @{
-    ViewData["Title"] = "Register";
-   
+
+    ViewData["Title"] = "Create User";
+
 }
-<style>
-    .box {
-    
-    }
-</style>
 
 <h1>Register</h1>
 
@@ -15,8 +11,8 @@
 <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-4 box">
-        <form asp-action="Register" asp-controller="Library" method="post">
-            <h4>Create a new account.</h4>
+        <form asp-action="CreateUser" asp-controller="Library" method="post">
+            <h4>Create a new User</h4>
             <hr />
 
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -33,7 +29,16 @@
                 <span asp-validation-for="@Model.Email" class="text-danger"></span>
             </div>
 
-            <div class="row">
+            <div class="form-group">
+                <select class="custom-select" name="Selectedrole">
+                    <option selected>---Select Role---</option>
+                    <option value="reader">Reader</option>
+                    <option value="librarian">Librarian</option>
+                    <option value="admin">admin</option>
+                </select>
+            </div>
+
+            <div class="row ">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="@Model.Password"></label>

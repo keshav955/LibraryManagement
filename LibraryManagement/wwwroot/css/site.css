@@ -61,6 +61,7 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+  background-color:ghostwhite;
 }
 .footer {
   position: absolute;
@@ -77,4 +78,12 @@ body {
     justify-content: center;
     padding: 20px;
     color: #212529;
+}
+
+.box{
+    background-color:white;
+    border: 1px solid lightgrey;
+    box-shadow: rgba(0,0,0,0.2) 2px 2px;
+    padding : 20px;
+    border-radius: 10px;
 }

@@ -46,12 +46,14 @@ namespace LibraryManagement.Controllers
                 {
                     Email = ru.Email,
                     EmailConfirmed = true,
-                    UserName = ru.UserName
+                    UserName = ru.UserName,
+                    IsApproved = false
                 };
 
                 var resp = await userManager.CreateAsync(Iuser, ru.Password);
                 if (resp.Succeeded)
                 {
+                 await userManager.AddToRoleAsync(Iuser, "reader");
                 }
                 return RedirectToAction("Login");
                 }
@@ -83,13 +85,25 @@ namespace LibraryManagement.Controllers
             if (user != null)
             {
                 var isvalid = await userManager.CheckPasswordAsync(user, lm.Password);
-
-                if (isvalid)
+                if (user.IsApproved)
                 {
-                    await signInManager.SignInAsync(user, true);
-                    return RedirectToAction("index","Home");
+                    if (isvalid)
+                    {
+                        await signInManager.SignInAsync(user, true);
+                        return RedirectToAction("index", "Home");
+                    }
                 }
+                else
+                {
+                    return RedirectToAction("NotApproved");
+                }
+               
             }
+            return View();
+        }
+
+        public IActionResult NotApproved()
+        {
             return View();
         }
 
@@ -103,8 +117,9 @@ namespace LibraryManagement.Controllers
         {
             return View();
         }
-
         [HttpPost]
+
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateRole(CreateRole cr)
         {
             if (ModelState.IsValid)
@@ -295,12 +310,17 @@ namespace LibraryManagement.Controllers
             return RedirectToAction("EditRoles", new { Id = roleId });
         }
 
-        public IActionResult ListUsers()
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> ListUsers()
         {
             var users = userManager.Users;
+
+            await userManager.GetRolesAsync(users.FirstOrDefault());
+
             return View(users);
         }
 
+        [Authorize(Roles = "librarian")]
         public IActionResult Approval()
         {
             var users = userManager.Users;
@@ -308,6 +328,7 @@ namespace LibraryManagement.Controllers
             return View(unapproved_users);
         }
 
+        [Authorize(Roles = "librarian")]
         [HttpPost]
         public async Task<IActionResult> Approval(string id)
         {
@@ -334,6 +355,8 @@ namespace LibraryManagement.Controllers
             return View();
         }
 
+
+        [Authorize(Roles = "librarian")]
         public IActionResult AddBook()
         {
             return View();
@@ -343,6 +366,43 @@ namespace LibraryManagement.Controllers
         public IActionResult AddBook(Bookdetails book)
         {
             return View();
+        }
+
+        [Authorize(Roles = "admin")]
+        public IActionResult CreateUser()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(RegisterUser ru/*, ReaderDetails rd*/)
+        {
+            var selectedrole = Request.Form["Selectedrole"];
+            if (ModelState.IsValid)
+            {
+                bool approval = true;
+                if (selectedrole.Equals("reader"))
+                {
+                     approval = false;
+                }
+                    var Iuser = new User()
+                {
+                    Email = ru.Email,
+                    EmailConfirmed = true,
+                    UserName = ru.UserName,
+                    IsApproved = approval
+                    };
+                
+
+                var resp = await userManager.CreateAsync(Iuser, ru.Password);
+                if (resp.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(Iuser, selectedrole);
+                }
+                return RedirectToAction("Login");
+            }
+            return View(ru);
         }
 
 

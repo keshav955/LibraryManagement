@@ -10,64 +10,99 @@
     ViewBag.Title = "All Users";
 }
 
-<h1>All Users</h1>
+<style>
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-weight: 600;
+    }
+
+    table {
+        margin: 0 auto;
+        width: 90%;
+        text-align: left;
+    }
+
+  @*  tr:nth-child(even) {
+        background-color: #333333;
+        color: white;
+    }
+*@
+    th {
+        padding-top: 20px !important;
+        padding-bottom: 20px;
+        border-bottom: 1px dotted grey;
+    }
+
+    .header {
+        color: #333333;
+        padding: 5px;
+    }
+
+    tr {
+        color: #333333;
+        background-color: white;
+        padding-left: 10px;
+        border-bottom: 1px dashed grey;
+    }
+
+        tr:hover {
+            background-color: lightgray;
+            color: white;
+        }
+
+    td {
+        width: 25%;
+        padding: 5px;
+    }
+</style>
+<h3 class="mb-5 text-center">Approve Readers</h3>
 
 @if (Model.Any())
 {
-    <form asp-action="Approval"  method = "post" >
-        <div class="card">
-            <div class="card-header">
-                <h2>Add or remove users from this role</h2>
-            </div>
-            <div class="card-body">
-                @foreach (var user in Model)
-                {
-                    @*<div class="form-check m-1">
-                <input type="hidden" asp-for="@user.Id" />
-                <input type="hidden" asp-for="@user.UserName" />
-                <input asp-for="@user.IsApproved" class="form-check-input" />
-                <label class="form-check-label" asp-for="@user.IsApproved">
-                    @user.UserName
-                </label>
-            </div>*@
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            User Id : @user.Id
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">@user.UserName</h5>
-                        </div>
-                        <div class="card-footer">
-                            <button type="submit" value="Approve"  asp-route-id="@user.Id" class="btn btn-danger">Approve</button>
-                            <a asp-action="ListUsers" class="btn btn-danger">leave</a>
-                        </div>
-                    </div>
-                }
-            </div>
-            <div class="card-footer">
-                <input type="submit" value="Approve" class="btn btn-primary"
-                       style="width:auto" />
-                <a asp-action="ListUsers" 
-                   class="btn btn-primary" style="width:auto">Cancel</a>
-            </div>
-        </div>
-       </form>
+    <form asp-action="Approval" method="post">
+        <table>
+            <tr class="header">
+                <th>User Id</th>
+                <th>Email</th>
+                <th>Username</th>
+                <th>
+                    Pending Approvals
+                </th>
+            </tr>
+            @foreach (var user in Model)
+            {
+        <tr>
+            <td>@user.Id</td>
+            <td>@user.Email</td>
+            <td>@user.UserName</td>
 
-        }
-        else
-        {
-        <div class="card">
-            <div class="card-header">
-                All Users Are Approved
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">
-                    Use the button below to create a user
-                </h5>
-                <a class="btn btn-primary" style="width:auto"
-                   asp-controller="Account" asp-action="Register">
-                    Add new user
-                </a>
-            </div>
+            <td><button type="submit" class="btn btn-primary" style="width:auto;" asp-route-id="@user.Id">approve</button></td>
+        </tr>
+            }
+        </table>
+       @* <div>
+            <input type="submit" value="Approve" class="btn btn-primary" style="width:auto" />
+            <a asp-action="ListUsers" class="btn btn-primary" style="width:auto">Cancel</a>
+        </div>*@
+</form>
+
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            All Users Are Approved
         </div>
-        }
+        <div class="card-body">
+            <h5 class="card-title">
+                Use the button below to create a user
+            </h5>
+            <a class="btn btn-primary" style="width:auto"
+               asp-controller="Library" asp-action="Register">
+                Add new user
+            </a>
+        </div>
+    </div>
+}
