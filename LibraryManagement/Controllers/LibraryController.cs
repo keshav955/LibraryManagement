@@ -39,7 +39,7 @@ namespace LibraryManagement.Controllers
 
         public IActionResult Register()
         {
-            if (HttpContext.User != null)
+            if (HttpContext.User.Identity.IsAuthenticated && HttpContext.User != null)
             {
                 ViewBag.ErrorMessage = "Already Logged In";
                 return RedirectToAction("Dashboard");
@@ -339,7 +339,7 @@ namespace LibraryManagement.Controllers
             return View(users);
         }
 
-        [Authorize(Roles = "librarian")]
+        [Authorize(Roles = "librarian , admin")]
         public async Task<IActionResult> Approval()
         {
             var user = await userManager.GetUserAsync(HttpContext.User);
@@ -354,8 +354,8 @@ namespace LibraryManagement.Controllers
             var unapproved_users = users.Where(a => a.IsApproved.Equals(false));
             return View(unapproved_users);
         }
-
-        [Authorize(Roles = "librarian")]
+        
+        [Authorize(Roles = "librarian , admin")]
         [HttpPost]
         public async Task<IActionResult> Approval(string id)
         {
@@ -475,14 +475,20 @@ namespace LibraryManagement.Controllers
             return View(ru);
         }
 
-        public async Task<IActionResult> IssueBook()
-        {
+        public async Task<IActionResult> IssueBook(int BookId)
+        {   
             var user = await userManager.GetUserAsync(HttpContext.User);
             if (user != null)
             {
                 var role = await userManager.GetRolesAsync(user);
                 var userrole = role.FirstOrDefault();
                 ViewBag.userrole = userrole.ToUpper();
+                
+                if (userrole.Equals("reader"))
+                {
+                    ViewBag.BookId = BookId;
+                    ViewBag.userId = user.Email;
+                }
             }
 
             return View();
@@ -543,6 +549,26 @@ namespace LibraryManagement.Controllers
                 var userrole = role.FirstOrDefault();
                 ViewBag.userrole = userrole.ToUpper();
             }
+            else
+            {
+                return RedirectToAction("login");
+            }
+            return View();
+        }
+
+        public async Task<IActionResult> ListBookToReader()
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if (user != null)
+            {
+                var role = await userManager.GetRolesAsync(user);
+                var userrole = role.FirstOrDefault();
+                ViewBag.userrole = userrole.ToUpper();
+            }
+
+            var model = libservices.GetBooks();
+            ViewBag.books = model;
+            ViewBag.user = user;
             return View();
         }
 
