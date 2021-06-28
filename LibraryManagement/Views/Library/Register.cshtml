@@ -1,16 +1,66 @@
 ﻿@model RegisterUser
 @{
     ViewData["Title"] = "Register";
-   
+
 }
 <style>
+    .body {
+        background-color: lightgrey;
+    }
+
     .box {
-    
+        background-color: white;
+        margin: 0 auto;
+        width: 35%;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        flex-direction: column;
+        text-align: center;
+        border: 1px solid lightgrey;
+        overflow: hidden;
+        padding: 20px;
+        color: #5D6061;
+        box-shadow: rgba(0,0,0,0.2) 2px 2px 2px;
+    }
+
+        .box:before {
+            content: '';
+            width: 120%;
+            margin-top: -20px;
+            margin-left: -20px;
+            border-bottom: solid 3px #007BFF;
+            z-index: 1;
+        }
+
+    .horizontal {
+        display: flex;
+        flex-direction: row;
+        text-align: center;
+        justify-content: center;
+        padding: 20px;
+        color: #212529;
+    }
+
+        .horizontal span {
+            font-size: 35px;
+        }
+
+    .box .line {
+        width: 100%;
+        height: 1.5px;
+        background-color: lavender;
+        margin-bottom: 15px;
+    }
+
+    .box .half-line {
+        width: 35%;
+        height: 1.5px;
+        background-color: lavender;
+        transform: translateY(12px);
     }
 </style>
-
-<h1>Register</h1>
-
 
 <div class="row">
     <div class="col-md-4"></div>
@@ -21,39 +71,66 @@
 
             <div asp-validation-summary="All" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="@Model.UserName"></label>
-                <input asp-for="@Model.UserName" class="form-control" />
+            <div class="form-group mt-4">
+                <div class="input-group">
+                    <input placeholder="User Name" asp-for="@Model.UserName" class="form-control" />
+                    <div class="input-group-append">
+                        <div class="input-group-text"><i class="fas fa-user"></i></div>
+                    </div>
+                </div>
                 <span asp-validation-for="@Model.UserName" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="@Model.Email"></label>
-                <input asp-for="@Model.Email" class="form-control" />
+            <div class="form-group mt-4">
+                <div class="input-group">
+                    <input placeholder="Email" asp-for="@Model.Email" class="form-control" />
+                    <div class="input-group-append">
+                        <div class="input-group-text"><i class="fas fa-envelope"></i></div>
+                    </div>
+                </div>
                 <span asp-validation-for="@Model.Email" class="text-danger"></span>
             </div>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="@Model.Password"></label>
-                        <input asp-for="@Model.Password" class="form-control" />
-                        <span asp-validation-for="@Model.Password" class="text-danger"></span>
+            <div class="form-group mt-4">
+                <div class="input-group">
+                    <input placeholder="Password" asp-for="@Model.Password" class="form-control" />
+                    <div class="input-group-append">
+                        <div class="input-group-text"><i class="fas fa-key"></i></div>
                     </div>
-                </div>
-
-                <div class="col-md-6 ">
-                    <div class="form-group">
-                        <label asp-for="@Model.ConfirmPassword"></label>
-                        <input asp-for="@Model.ConfirmPassword" class="form-control" />
-                        <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
-                    </div>
+                    <span asp-validation-for="@Model.Password" class="text-danger"></span>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Register</button>
+            <div class="form-group mt-4">
+                <div class="input-group">
+                    <input placeholder="Confirm Password" asp-for="@Model.ConfirmPassword" class="form-control" />
+                    <div class="input-group-append">
+                        <div class="input-group-text"><i class="fas fa-key"></i></div>
+                    </div>
+                </div>
+                <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <div class="mt-4 mb-4">
+                <button class="btn btn-primary" type="submit">Register</button>
+            </div>
+            <div>
+                <button type="button" class="btn btn-primary btn-md btn-block"><i class="fab fa-facebook"></i>&nbsp; Sign up using Facebook</button>
+                <button type="button" class="btn btn-danger btn-md btn-block"><i class="fab fa-google-plus"></i> &nbsp; Sign up using Google</button>
+            </div>
+
         </form>
     </div>
     <div class="col-md-4"></div>
 
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <script type="text/javascript">
+
+            window.onload = function () {
+                alert("@ViewBag.ErrorMessage");
+            };
+        </script>
+    }
 </div>
+

@@ -1,11 +1,14 @@
 ﻿using LibraryManagement.Entities;
 using LibraryManagement.Models;
+using LibraryManagement.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Web;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,15 +20,17 @@ namespace LibraryManagement.Controllers
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly RoleManager<IdentityRole> roleManager;
-        
+        private readonly ILibraryServices libservices;
 
         public LibraryController(ILogger<LibraryController> logger , UserManager<User> userManager
-            ,SignInManager<User> signInManager ,RoleManager<IdentityRole> roleManager)
+            ,SignInManager<User> signInManager ,RoleManager<IdentityRole> roleManager,
+            ILibraryServices libservices)
         {
             _logger = logger;
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
+            this.libservices = libservices;
         }
         public IActionResult Index()
         {
@@ -34,6 +39,11 @@ namespace LibraryManagement.Controllers
 
         public IActionResult Register()
         {
+            if (HttpContext.User != null)
+            {
+                ViewBag.ErrorMessage = "Already Logged In";
+                return RedirectToAction("Dashboard");
+            }
             return View();
         }
 
@@ -53,25 +63,21 @@ namespace LibraryManagement.Controllers
                 var resp = await userManager.CreateAsync(Iuser, ru.Password);
                 if (resp.Succeeded)
                 {
-                 await userManager.AddToRoleAsync(Iuser, "reader");
+                    await userManager.AddToRoleAsync(Iuser, "reader");
                 }
                 return RedirectToAction("Login");
                 }
             return View(ru);
             }
         
-          
-            /*var readerDetails = new ReaderDetails()
-            {
-            };*/
-            // ;
-            // roleManager.role
-
-            //return View();
 
         public IActionResult Login()
         {
-            ViewBag.ErrorMessage = "";
+            if (HttpContext.User.Identity.IsAuthenticated && HttpContext.User != null)
+            {
+                ViewBag.ErrorMessage = "Already Logged In";
+                return RedirectToAction("Dashboard");
+            }
             return View();
         }
 
@@ -90,7 +96,7 @@ namespace LibraryManagement.Controllers
                     if (isvalid)
                     {
                         await signInManager.SignInAsync(user, true);
-                        return RedirectToAction("index", "Home");
+                        return RedirectToAction("Dashboard", "Library");
                     }
                 }
                 else
@@ -100,6 +106,13 @@ namespace LibraryManagement.Controllers
                
             }
             return View();
+        }
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            await userManager.DeleteAsync(user);
+
+            return RedirectToAction("ListUsers");
         }
 
         public IActionResult NotApproved()
@@ -302,9 +315,7 @@ namespace LibraryManagement.Controllers
                         continue;
                     else
                         return RedirectToAction("EditRoles", new { Id = roleId });
-                }
-
-                
+                }       
             }
 
             return RedirectToAction("EditRoles", new { Id = roleId });
@@ -313,6 +324,14 @@ namespace LibraryManagement.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> ListUsers()
         {
+            var us = await userManager.GetUserAsync(HttpContext.User);
+            if (us != null)
+            {
+                var role = await userManager.GetRolesAsync(us);
+                var userrole = role.FirstOrDefault();
+                ViewBag.userrole = userrole.ToUpper();
+            }
+
             var users = userManager.Users;
 
             await userManager.GetRolesAsync(users.FirstOrDefault());
@@ -321,8 +340,16 @@ namespace LibraryManagement.Controllers
         }
 
         [Authorize(Roles = "librarian")]
-        public IActionResult Approval()
+        public async Task<IActionResult> Approval()
         {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if (user != null)
+            {
+                var role = await userManager.GetRolesAsync(user);
+                var userrole = role.FirstOrDefault();
+                ViewBag.userrole = userrole.ToUpper();
+            }
+
             var users = userManager.Users;
             var unapproved_users = users.Where(a => a.IsApproved.Equals(false));
             return View(unapproved_users);
@@ -357,20 +384,63 @@ namespace LibraryManagement.Controllers
 
 
         [Authorize(Roles = "librarian")]
-        public IActionResult AddBook()
+        public async Task<IActionResult> AddBook()
         {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if (user != null)
+            {
+                var role = await userManager.GetRolesAsync(user);
+                var userrole = role.FirstOrDefault();
+                ViewBag.userrole = userrole.ToUpper();
+            }
+
             return View();
         }
 
         [HttpPost]
         public IActionResult AddBook(Bookdetails book)
         {
+            if (ModelState.IsValid)
+            {
+                //HttpPostedFileBase file = Request.Files["ImageData"];
+              //  string filename = Path.GetFileNameWithoutExtension(book.Image);
+
+                libservices.CreateBooks(book.Title, book.Auther, book.Publisher, book.Discription, book.Available);
+             
+                return RedirectToAction("register");
+             
+            }
             return View();
         }
 
-        [Authorize(Roles = "admin")]
-        public IActionResult CreateUser()
+        [Authorize(Roles = "librarian")]
+        public async Task<IActionResult> ListBooks()
         {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if (user != null)
+            {
+                var role = await userManager.GetRolesAsync(user);
+                var userrole = role.FirstOrDefault();
+                ViewBag.userrole = userrole.ToUpper();
+            }
+
+            var model =  libservices.GetBooks();
+            ViewBag.books = model;
+            return View();
+        }
+
+
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> CreateUser()
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if (user != null)
+            {
+                var role = await userManager.GetRolesAsync(user);
+                var userrole = role.FirstOrDefault();
+                ViewBag.userrole = userrole.ToUpper();
+            }
+
             return View();
         }
 
@@ -400,9 +470,80 @@ namespace LibraryManagement.Controllers
                 {
                     await userManager.AddToRoleAsync(Iuser, selectedrole);
                 }
-                return RedirectToAction("Login");
+                return RedirectToAction("ListUsers");
             }
             return View(ru);
+        }
+
+        public async Task<IActionResult> IssueBook()
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if (user != null)
+            {
+                var role = await userManager.GetRolesAsync(user);
+                var userrole = role.FirstOrDefault();
+                ViewBag.userrole = userrole.ToUpper();
+            }
+
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> IssueBook(BorrowedBooks borrowedBooks)
+        {
+            if (ModelState.IsValid)
+            {
+                var book = libservices.GetBookById(borrowedBooks.BookId);
+                var user = await userManager.FindByEmailAsync(borrowedBooks.UserEmail);
+
+                if(book != null && user != null)
+                {
+                    if (book.Available)
+                    {
+                        borrowedBooks.BookingDate = DateTime.Now;
+                        borrowedBooks.ReturnDate = borrowedBooks.BookingDate.AddDays(15);
+                        libservices.IssueBook(borrowedBooks.BookId, borrowedBooks.UserEmail, borrowedBooks.BookingDate, borrowedBooks.ReturnDate);
+                        return RedirectToAction("ListIssuedBook");
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "Book Not Available on the Shelf";
+                    } 
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Book or User Not Found With provided Id, Please try again";
+                }
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Please enter valid value";
+            }
+            return View();
+        }
+        public async Task<IActionResult> ListIssuedBook()
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if (user != null)
+            {
+                var role = await userManager.GetRolesAsync(user);
+                var userrole = role.FirstOrDefault();
+                ViewBag.userrole = userrole.ToUpper();
+            }
+
+            var model = libservices.GetIssued();
+            ViewBag.issued = model;
+            return View();
+        }
+        public async Task<IActionResult> Dashboard()
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if (user != null)
+            {
+                var role = await userManager.GetRolesAsync(user);
+                var userrole = role.FirstOrDefault();
+                ViewBag.userrole = userrole.ToUpper();
+            }
+            return View();
         }
 
 

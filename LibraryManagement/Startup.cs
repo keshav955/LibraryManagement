@@ -1,5 +1,6 @@
 using LibraryManagement.Db;
 using LibraryManagement.Entities;
+using LibraryManagement.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +29,8 @@ namespace LibraryManagement
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddTransient<ILibraryServices, LibraryServices>();
 
             services.AddDbContext<LibraryContext>(options =>
             options.UseSqlServer(Configuration["ConnectionString:LibraryDB"]));

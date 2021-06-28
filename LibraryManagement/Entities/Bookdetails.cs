@@ -15,10 +15,11 @@ namespace LibraryManagement.Entities
         public string Discription { get; set; }
         public bool Available { get; set; }
        
-        [DataType(DataType.Upload)]
+        /*[DataType(DataType.Upload)]
+        [Required]
         [Display(Name = "Upload File")]
        // [Required(ErrorMessage = "Please choose file to upload.")]
-        public string Image { get; set; }
+        public string Image { get; set; }*/
 
     }
 }
