@@ -19,14 +19,17 @@
     <title>@ViewData["Title"] - LibraryManagement</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/2e193f96dc.js" crossorigin="anonymous"></script>
 
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-color border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LibraryManagement</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Library" asp-action="Dashboard">LibraryManagement</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -34,7 +37,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Library" asp-action="Dashboard">Home</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Library" asp-action="Dashboard">Home</a>
                         </li>
                     </ul>
                     @if (signInManager.IsSignedIn(User))
@@ -46,7 +49,7 @@
                             </ul>
                             <ul class="navbar-nav ml-auto">
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Library" asp-action="#">@User.Identity.Name</a>
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Library" asp-action="#">@User.Identity.Name</a>
                                 </li>
 
                                 <li class="nav-item ">
@@ -62,10 +65,10 @@
                             {
                             <ul class="navbar-nav ml-auto">
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Library" asp-action="Register">Register</a>
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Library" asp-action="Register">Register</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Library" asp-action="Login">Login</a>
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Library" asp-action="Login">Login</a>
                                 </li>
                             </ul>
                             }

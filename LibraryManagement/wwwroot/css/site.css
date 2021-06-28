@@ -19,9 +19,9 @@ a {
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #4D8CED;
+    border-color: #1861ac;
 }
 
 /* Sticky footer styles
@@ -35,8 +35,13 @@ html {
   }
 }
 
+.bg-color {
+    background-image: linear-gradient(to right, #01C3CC,#496ADC,#7D2AE8);
+    color: white;
+}
+
 .border-top {
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid #333333;
 }
 .border-bottom {
   border-bottom: 1px solid #e5e5e5;
@@ -59,9 +64,9 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 0px;
-  background-color:ghostwhite;
+    /* Margin bottom by footer height */
+    margin-bottom: 0px;
+    background-image: linear-gradient(to bottom, #e1eedd,#e1eedd,#e1eedd);
 }
 .footer {
   position: absolute;

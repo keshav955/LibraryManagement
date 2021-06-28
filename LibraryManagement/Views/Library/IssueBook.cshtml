@@ -1,6 +1,15 @@
 ﻿@model BorrowedBooks
 @{
     ViewData["Title"] = "Login";
+    var userrole = ViewBag.userrole;
+    var bookId = "";
+    var userId = "";
+    if (userrole.Equals("READER"))
+    {
+         bookId =(ViewBag.BookId).ToString();
+         userId = ViewBag.userId;
+    }
+
 }
 <style>
     .body {
@@ -71,16 +80,16 @@
             <hr />
 
             <div asp-validation-summary="All" class="text-danger"></div>
-
+           
             <div class="form-group">
                 <label asp-for="@Model.BookId"></label>
-                <input type="text" asp-for="@Model.BookId" class="form-control" />
+                <input type="text" asp-for="@Model.BookId" value="@bookId" class="form-control" />
                 <span asp-validation-for="@Model.BookId" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="@Model.UserEmail"></label>
-                <input asp-for="@Model.UserEmail" class="form-control" />
+                <input asp-for="@Model.UserEmail" value="@userId" class="form-control" />
                 <span asp-validation-for="@Model.UserEmail" class="text-danger"></span>
             </div>
 

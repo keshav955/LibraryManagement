@@ -63,7 +63,7 @@ namespace LibraryManagement
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Library}/{action=Dashboard}/{id?}");
             });
         }
     }

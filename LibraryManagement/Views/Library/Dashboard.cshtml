@@ -1,107 +1,133 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <title>Cards</title>
-</head>
+﻿@{
+    //   var user = await userManager.FindByIdAsync(User.Identity.GetUserId());
+    var userrole = ViewBag.userrole;
+}
 
-<style type="text/css">
-
-    body {
-        font-family: arial;
+<style>
+    .cont {
+        margin: 0;
+        padding: 0;
+        font-family: 'poppins', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f6f6f6;
     }
 
-    .main {
-        margin: 2%;
+    .boxy {
+        width: 320px;
     }
 
-    .card {
-        width: 20%;
-        display: inline-block;
-        box-shadow: rgba(0,0,0,0.4) 2px 2px;
-        border-radius: 5px;
-        margin: 2%;
-    }
-
-    .image img {
-        width: 100%;
-        border-top-right-radius: 5px;
-        border-top-left-radius: 5px;
-    }
-
-    .title {
-        text-align: center;
-        padding: 10px;
-    }
-
-    h1 {
-        font-size: 20px;
-    }
-
-    .des {
-        padding: 3px;
-        text-align: center;
-        padding-top: 10px;
-        border-bottom-right-radius: 5px;
-        border-bottom-left-radius: 5px;
-    }
-
-    .card .des button {
-        margin-top: 40px;
-        margin-bottom: 10px;
-        background-color: white;
-        border: 1px solid black;
-        border-radius: 5px;
-        padding: 10px;
-    }
-
-        .card .des button:hover {
-            background-color: black;
+        .boxy h2 {
             color: white;
-            transition: .5s;
-            cursor: pointer;
+            background-color: #03a9f4;
+            padding: 10px 20px;
+            font-size: 20px;
+            font-weight: 700;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
         }
+
+        .boxy ul {
+            position: relative;
+            background: white;
+        }
+
+            .boxy ul li {
+                list-style: none;
+                padding: 10px;
+                margin-left: -10px;
+                width: 100%;
+                box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+                transition: transform 0.5s;
+            }
+
+                .boxy ul li:hover {
+                    transform: scale(1.1);
+                    z-index: 100;
+                    background-color: #25BCFF;
+                    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+                    color: white;
+                }
+
+                .boxy ul li span {
+                    width: 20px;
+                    height: 20px;
+                    text-align: center;
+                    line-height: 20px;
+                    background-color: #25bcff;
+                    color: white;
+                    display: inline-block;
+                    border-radius: 50%;
+                    margin-right: 10px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    transform: translateY(-2px);
+                }
+
+                .boxy ul li a {
+                    text-decoration: none;
+                }
+
+                .boxy ul li:hover span {
+                    background: #fff;
+                    color: #25bcff;
+                }
 </style>
-<body>
+<div class="cont">
+    <div class="boxy">
 
-    <div class="main">
+        <h2> Visit</h2>
 
-        <!--cards -->
+        <ul>
+            @if (userrole.Equals("ADMIN"))
+            {
+                <li>
+                    <span>1</span>
+                    <a asp-action="CreateUser" asp-controller="library">Create User</a>
+                </li>
+                <li>
+                    <span>2</span>
+                    <a asp-action="ListUsers" asp-controller="library">Manage Users</a>
+                </li>
+                <li>
+                    <span>3</span>
+                    <a asp-action="Approval" asp-controller="library">Pending Approvals</a>
+                </li>
+            }
+            else if (userrole.Equals("LIBRARIAN"))
+            {
+                <li>
+                    <span>1</span>
+                    <a asp-action="Approval" asp-controller="library">Pending Approvals</a>
+                </li>
+                <li>
+                    <span>2</span>
+                    <a asp-action="AddBook" asp-controller="library">Add a New Book</a>
+                </li>
+                <li>
+                    <span>3</span>
+                    <a asp-action="ListBooks" asp-controller="library">Manage Books</a>
+                </li>
+                <li>
+                    <span>4</span>
+                    <a asp-action="IssueBook" asp-controller="library">Issue Book To Reader</a>
+                </li>
+                <li>
+                    <span>5</span>
+                    <a asp-action="ListIssuedBook" asp-controller="library">Check Borrowed Books</a>
+                </li>
 
-        <div class="card">
-
-            <div class="image">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Gfp-missouri-st-louis-clubhouse-pond-and-scenery.jpg/1199px-Gfp-missouri-st-louis-clubhouse-pond-and-scenery.jpg">
-            </div>
-            <div class="title">
-                <h1>
-                    Write title Here
-                </h1>
-            </div>
-            <div class="des">
-                <p>You can Add Desccription Here...</p>
-                <button>Read More...</button>
-            </div>
-        </div>
-        <!--cards -->
+            }
+            else
+            {
+                <li>
+                    <span>1</span>
+                    <a asp-action="ListBookToReader" asp-controller="library">See List of Books</a>
+                </li>
+            }
 
 
-        <div class="card">
-
-            <div class="image">
-                <img src="https://cdn.pixabay.com/photo/2018/01/09/03/49/the-natural-scenery-3070808_1280.jpg">
-            </div>
-            <div class="title">
-                <h1>
-                    Write title Here
-                </h1>
-            </div>
-            <div class="des">
-                <p>You can Add Desccription Here...</p>
-                <button>Read More...</button>
-            </div>
-        </div>
-        <!--cards -->
-
+        </ul>
     </div>
-</body>
-</html>
+</div>
