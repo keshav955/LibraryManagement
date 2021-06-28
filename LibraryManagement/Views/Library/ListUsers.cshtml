@@ -1,7 +1,12 @@
 ﻿@model IEnumerable<User>
+@inject RoleManager<IdentityRole> roleManager;
 @inject UserManager<User> userManager;
 @{
-    ViewBag.Title = "All Users";
+    foreach(var item in Model) {
+        var role = await userManager.GetRolesAsync(item);
+        var userrole = role.FirstOrDefault();
+        ViewBag.Title = "All Users";
+    }
 }
 <style>
 
@@ -42,7 +47,7 @@
         }
 
     td {
-        width: 25%;
+        width: 18%;
         padding: 5px;
     }
 </style>
@@ -55,7 +60,6 @@
         Add new user
     </a>
 
-
     <table>
         <tr class="header">
             <th>User Id</th>
@@ -65,24 +69,33 @@
                 IsApproved
             </th>
             <th>Role</th>
+            <th>Delete</th>
         </tr>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Email</td>
-                <td>@item.UserName</td>
-                <td>@item.IsApproved</td>
-                <td>@await userManager.GetRolesAsync(item)</td>
-            </tr>
+        @{
+            foreach (var item in Model)
+            {
+                var role = await userManager.GetRolesAsync(item);
+                var userrole = role.FirstOrDefault();
+               
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Email</td>
+                    <td>@item.UserName</td>
+                    <td>@item.IsApproved</td>
+                    <td>@userrole</td>
+
+                    <td>
+                        <a asp-action="DeleteUser" asp-controller="Library" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
         }
 
-        <a class="btn btn-primary" style="width:auto"
-           asp-controller="library" asp-action="ListByRole">
-           Get List By Roles
-        </a>
     </table>
+  @*  <a class="btn btn-primary" style="width:auto" asp-controller="library" asp-action="ListByRole">
+        Get List By Roles
+    </a>*@
 }
 else
 {

@@ -14,23 +14,23 @@
         color: #212529;
     }
 </style>
-<h1>Register</h1>
+<h1>Add Book</h1>
 
 
 <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-4 box">
         <form enctype="multipart/form-data" asp-action="AddBook" asp-controller="Library" method="post">
-            <h4>Create a new account.</h4>
+            <h4>Add a New Book</h4>
             <hr />
 
-            <div asp-validation-summary="All" class="text-danger"></div>
+           @* <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
             <div class="custom-file">
-               <input asp-for="@Model.Image" class="form-control custom-file-input" />
+               <input type="file" asp-for="@Model.Image" name="Image" class="form-control custom-file-input" />
                <label class="custom-file-label" asp-for="@Model.Image">Choose file ...</label>
             </div>
-            </div>
+            </div>*@
 
 
             <div class="form-group">
@@ -68,11 +68,11 @@
                 <div class="col-md-9">
                     <div class="horizontal" style="justify-content: space-around;">
                         <div>
-                            <input type="radio" id="teacher" name="Available" value="False">
+                            <input type="radio" id="Unavailable" name="Available" value="False">
                             <label for="Unavailable"> Unavailable</label>
                         </div>
                         <div>
-                            <input type="radio" id="student" name="Available" value="True">
+                            <input type="radio" id="Available" name="Available" value="True">
                             <label for="Available">Available</label>
                         </div>
                     </div>

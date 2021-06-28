@@ -1,0 +1,92 @@
+﻿@model BorrowedBooks
+@{
+    ViewData["Title"] = "Login";
+}
+<style>
+    .body {
+        background-color: lightgrey;
+    }
+
+    .box {
+        background-color: white;
+        margin: 0 auto;
+        width: 35%;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        flex-direction: column;
+        text-align: center;
+        border: 1px solid lightgrey;
+        overflow: hidden;
+        padding: 20px;
+        color: #5D6061;
+        box-shadow: rgba(0,0,0,0.2) 2px 2px 2px;
+    }
+
+        .box:before {
+            content: '';
+            width: 120%;
+            margin-top: -20px;
+            margin-left: -20px;
+            border-bottom: solid 3px #007BFF;
+            z-index: 1;
+        }
+
+    .horizontal {
+        display: flex;
+        flex-direction: row;
+        text-align: center;
+        justify-content: center;
+        padding: 20px;
+        color: #212529;
+    }
+
+        .horizontal span {
+            font-size: 35px;
+        }
+
+    .box .line {
+        width: 100%;
+        height: 1.5px;
+        background-color: lavender;
+        margin-bottom: 15px;
+    }
+
+    .box .half-line {
+        width: 35%;
+        height: 1.5px;
+        background-color: lavender;
+        transform: translateY(12px);
+    }
+</style>
+<h1>Issue a Book</h1>
+
+
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 box">
+        <form asp-action="IssueBook" asp-controller="Library" method="post">
+            <h4>Issue Book to Reader</h4>
+            <hr />
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="@Model.BookId"></label>
+                <input type="text" asp-for="@Model.BookId" class="form-control" />
+                <span asp-validation-for="@Model.BookId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model.UserEmail"></label>
+                <input asp-for="@Model.UserEmail" class="form-control" />
+                <span asp-validation-for="@Model.UserEmail" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Issue</button>
+        </form>
+    </div>
+    <div class="col-md-4">@ViewBag.ErrorMessage</div>
+
+</div>

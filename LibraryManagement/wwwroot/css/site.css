@@ -60,7 +60,7 @@ html {
 
 body {
   /* Margin bottom by footer height */
-  margin-bottom: 60px;
+  margin-bottom: 0px;
   background-color:ghostwhite;
 }
 .footer {
@@ -80,7 +80,7 @@ body {
     color: #212529;
 }
 
-.box{
+.box1{
     background-color:white;
     border: 1px solid lightgrey;
     box-shadow: rgba(0,0,0,0.2) 2px 2px;
