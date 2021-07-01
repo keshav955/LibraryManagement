@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Entities
 {
-    public class User : IdentityUser<int>//generic
+    public class User : IdentityUser//generic
     {
         public bool IsApproved { get; set; }
     }
