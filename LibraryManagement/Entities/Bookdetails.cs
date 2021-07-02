@@ -8,16 +8,18 @@ namespace LibraryManagement.Entities
 {
     public class Bookdetails
     {
+        public int Id { get; set; }
         public string Publisher { get; set; }
         public string Auther { get; set; }
         public string Title { get; set; }
-        public string discription { get; set; }
+        public string Discription { get; set; }
         public bool Available { get; set; }
        
-        [DataType(DataType.Upload)]
+        /*[DataType(DataType.Upload)]
+        [Required]
         [Display(Name = "Upload File")]
-        [Required(ErrorMessage = "Please choose file to upload.")]
-        public string file { get; set; }
+       // [Required(ErrorMessage = "Please choose file to upload.")]
+        public string Image { get; set; }*/
 
     }
 }

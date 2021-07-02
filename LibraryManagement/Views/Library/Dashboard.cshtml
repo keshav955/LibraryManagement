@@ -1,0 +1,133 @@
+﻿@{
+    //   var user = await userManager.FindByIdAsync(User.Identity.GetUserId());
+    var userrole = ViewBag.userrole;
+}
+
+<style>
+    .cont {
+        margin: 0;
+        padding: 0;
+        font-family: 'poppins', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f6f6f6;
+    }
+
+    .boxy {
+        width: 320px;
+    }
+
+        .boxy h2 {
+            color: white;
+            background-color: #03a9f4;
+            padding: 10px 20px;
+            font-size: 20px;
+            font-weight: 700;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .boxy ul {
+            position: relative;
+            background: white;
+        }
+
+            .boxy ul li {
+                list-style: none;
+                padding: 10px;
+                margin-left: -10px;
+                width: 100%;
+                box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+                transition: transform 0.5s;
+            }
+
+                .boxy ul li:hover {
+                    transform: scale(1.1);
+                    z-index: 100;
+                    background-color: #25BCFF;
+                    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+                    color: white;
+                }
+
+                .boxy ul li span {
+                    width: 20px;
+                    height: 20px;
+                    text-align: center;
+                    line-height: 20px;
+                    background-color: #25bcff;
+                    color: white;
+                    display: inline-block;
+                    border-radius: 50%;
+                    margin-right: 10px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    transform: translateY(-2px);
+                }
+
+                .boxy ul li a {
+                    text-decoration: none;
+                }
+
+                .boxy ul li:hover span {
+                    background: #fff;
+                    color: #25bcff;
+                }
+</style>
+<div class="cont">
+    <div class="boxy">
+
+        <h2> Visit</h2>
+
+        <ul>
+            @if (userrole.Equals("ADMIN"))
+            {
+                <li>
+                    <span>1</span>
+                    <a asp-action="CreateUser" asp-controller="library">Create User</a>
+                </li>
+                <li>
+                    <span>2</span>
+                    <a asp-action="ListUsers" asp-controller="library">Manage Users</a>
+                </li>
+                <li>
+                    <span>3</span>
+                    <a asp-action="Approval" asp-controller="library">Pending Approvals</a>
+                </li>
+            }
+            else if (userrole.Equals("LIBRARIAN"))
+            {
+                <li>
+                    <span>1</span>
+                    <a asp-action="Approval" asp-controller="library">Pending Approvals</a>
+                </li>
+                <li>
+                    <span>2</span>
+                    <a asp-action="AddBook" asp-controller="library">Add a New Book</a>
+                </li>
+                <li>
+                    <span>3</span>
+                    <a asp-action="ListBooks" asp-controller="library">Manage Books</a>
+                </li>
+                <li>
+                    <span>4</span>
+                    <a asp-action="IssueBook" asp-controller="library">Issue Book To Reader</a>
+                </li>
+                <li>
+                    <span>5</span>
+                    <a asp-action="ListIssuedBook" asp-controller="library">Check Borrowed Books</a>
+                </li>
+
+            }
+            else
+            {
+                <li>
+                    <span>1</span>
+                    <a asp-action="ListBookToReader" asp-controller="library">See List of Books</a>
+                </li>
+            }
+
+
+        </ul>
+    </div>
+</div>

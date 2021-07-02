@@ -1,33 +1,102 @@
 ﻿@model IEnumerable<User>
-
+@inject RoleManager<IdentityRole> roleManager;
+@inject UserManager<User> userManager;
 @{
-    ViewBag.Title = "All Users";
+    foreach(var item in Model) {
+        var role = await userManager.GetRolesAsync(item);
+        var userrole = role.FirstOrDefault();
+        ViewBag.Title = "All Users";
+    }
 }
+<style>
 
-<h1>All Users</h1>
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-weight: 600;
+    }
+
+    table {
+        padding-right: 10px;
+        margin: 0 auto;
+        width: 90%;
+        text-align: left;
+    }
+
+    tr:nth-child(even) {
+        background-color: #667fd1;
+        color: white;
+    }
+
+    th {
+        padding: 6px;
+    }
+
+    .header {
+        color: #333333;
+    }
+
+    tr {
+        color: #333333;
+        background-color: white;
+    }
+
+        tr:hover {
+            background-color: gray;
+            color: white;
+        }
+
+    td {
+        width: 18%;
+        padding: 5px;
+    }
+</style>
+<h1 class="text-center">All Users</h1>
 
 @if (Model.Any())
-{
-    <a asp-action="Register" asp-controller="Library"
+{   
+    @*<a asp-action="Register" asp-controller="Library"
        class="btn btn-primary mb-3" style="width:auto">
         Add new user
-    </a>
+    </a>*@
+<div class="mb-5 pb-5">
+    <table class="mt-5 pt-5 pb-5 pt-5">
+        <tr class="header">
+            <th>User Id</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>
+                IsApproved
+            </th>
+            <th>Role</th>
+            <th>Delete</th>
+        </tr>
 
-    foreach (var user in Model)
-    {
-        <div class="card mb-3">
-            <div class="card-header">
-                User Id : @user.Id
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">@user.UserName</h5>
-            </div>
-            <div class="card-footer">
-                <a href="#" class="btn btn-danger">View</a>
-                <a href="#" class="btn btn-danger">Delete</a>
-            </div>
-        </div>
-    }
+        @{
+            foreach (var item in Model)
+            {
+                var role = await userManager.GetRolesAsync(item);
+                var userrole = role.FirstOrDefault();
+
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Email</td>
+                    <td>@item.UserName</td>
+                    <td>@item.IsApproved</td>
+                    <td>@userrole</td>
+
+                    <td>
+                        <a asp-action="DeleteUser" asp-controller="Library" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+    @*  <a class="btn btn-primary" style="width:auto" asp-controller="library" asp-action="ListByRole">
+            Get List By Roles
+        </a>*@
+</div>
 }
 else
 {
@@ -40,7 +109,7 @@ else
                 Use the button below to create a user
             </h5>
             <a class="btn btn-primary" style="width:auto"
-               asp-controller="Account" asp-action="Register">
+               asp-controller="library" asp-action="Register">
                 Add new user
             </a>
         </div>
